@@ -110,7 +110,7 @@ public void updateProfile(String userId, MyUser myUser){
 
 
 
-private boolean IsUserExistbyEmail(String email){
+    public boolean IsUserExistbyEmail(String email){
         try {
             GetAllUsers().search(email,true).get(0);
             return true;
@@ -121,7 +121,7 @@ private boolean IsUserExistbyEmail(String email){
 
 }
 
-    private boolean IsUserExistbyId(String userId){
+    public boolean IsUserExistbyId(String userId){
         try {
             GetAllUsers().get(userId).toRepresentation();
             return true;
