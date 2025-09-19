@@ -9,8 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface DocRepo extends JpaRepository<MyDocument,Long> {
+
     List<MyDocument> findAllByUserId(String userId);
+
     List<MyDocument> findByNameAndUserId(String name , String userId);
 
     Optional<MyDocument> findByIdAndUserId(Long docId, String userId);
+
 }

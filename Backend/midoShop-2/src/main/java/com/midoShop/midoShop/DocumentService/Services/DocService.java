@@ -107,39 +107,21 @@ public class DocService {
         return true;
     }
 
-    public MyDocumentType ClassifyDocumentByTypeWithAi(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("Uploaded file is null or empty.");
-        }
 
-        String documentText;
-        try {
-            documentText = new String(file.getBytes(), StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to read file content", e);
-        }
-
-        String userQuery =
-                "**Document Text:**\n```\n"
-                + documentText + "\n```\n"
-                + "**Classification:**";
-
-        return chatClient.prompt()
-                .system(ClassifyDocumentType.CLASSIFY_PROMPT)
-                .user(u -> u.text(userQuery))
-                .call()
-                .entity(MyDocumentType.class);
-
-    }
 
     public File downloadDocument(Long docId , String userId) throws FileNotFoundException {
+
         if(userId==null || docId==null) throw new IllegalArgumentException();
+
         Optional<MyDocument> byIdAndUserId = repo.findByIdAndUserId(docId, userId);
         if(byIdAndUserId.isEmpty()) throw new FileNotFoundException();
+
         String originalFilename = byIdAndUserId.get().getOriginalFilename();
         if(originalFilename==null) throw new FileNotFoundException();
+
         var fileToDownload = new File(DIRECTORY_PATH + File.separator + originalFilename);
         if(!Objects.equals(fileToDownload.getParent() , DIRECTORY_PATH)) throw new SecurityException();
+
         if(!fileToDownload.exists()) throw new FileNotFoundException();
         return fileToDownload;
     }

@@ -94,7 +94,7 @@ public class MyDocument {
         this.filePath = filePath;
     }
 
-    public Long getFileSize(long size) {
+    public Long getFileSize() {
         return fileSize;
     }
 

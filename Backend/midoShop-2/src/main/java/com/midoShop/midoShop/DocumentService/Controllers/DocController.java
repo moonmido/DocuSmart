@@ -3,6 +3,7 @@ package com.midoShop.midoShop.DocumentService.Controllers;
 import com.midoShop.midoShop.DocumentService.DTOs.MyDocumentType;
 import com.midoShop.midoShop.DocumentService.Inputs.MyDocumentInputInfo;
 import com.midoShop.midoShop.DocumentService.Models.MyDocument;
+import com.midoShop.midoShop.DocumentService.Services.AiDocService;
 import com.midoShop.midoShop.DocumentService.Services.DocService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -22,8 +23,14 @@ import java.util.List;
 @RequestMapping("/api/doc")
 public class DocController {
 
-    @Autowired
-    private DocService docService;
+
+    private final DocService docService;
+    private final AiDocService aiDocService;
+
+    public DocController(DocService docService, AiDocService aiDocService) {
+        this.docService = docService;
+        this.aiDocService = aiDocService;
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadDocument(
@@ -108,7 +115,7 @@ public class DocController {
     @PostMapping("/classify")
     public ResponseEntity<?> classifyDocument(@RequestParam("file") MultipartFile file) {
         try {
-            MyDocumentType documentType = docService.ClassifyDocumentByTypeWithAi(file);
+            MyDocumentType documentType = aiDocService.ClassifyDocumentByTypeWithAi(file);
             return ResponseEntity.ok().body(documentType);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Please provide a valid file!");
