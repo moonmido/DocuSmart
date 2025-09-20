@@ -112,19 +112,6 @@ public class DocController {
         }
     }
 
-    @PostMapping("/classify")
-    public ResponseEntity<?> classifyDocument(@RequestParam("file") MultipartFile file) {
-        try {
-            MyDocumentType documentType = aiDocService.ClassifyDocumentByTypeWithAi(file);
-            return ResponseEntity.ok().body(documentType);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Please provide a valid file!");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process file content!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected Error");
-        }
-    }
 
     @GetMapping("/download/{docId}")
     public ResponseEntity<?> downloadDocument(@RequestParam String userId, @PathVariable Long docId) {

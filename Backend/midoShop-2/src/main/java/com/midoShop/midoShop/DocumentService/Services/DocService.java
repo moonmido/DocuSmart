@@ -62,7 +62,7 @@ public class DocService {
         myDocument.setFilePath(targetFile.getPath());
         myDocument.setIssueDate(myDocumentInputInfo.issueDate());
         myDocument.setExpiryDate(myDocumentInputInfo.ExpiryDate());
-        myDocument.getFileSize(filetosave.getSize());
+        myDocument.setFileSize(filetosave.getSize());
         myDocument.setMimeType(filetosave.getContentType());
         myDocument.setType(myDocumentInputInfo.myDocumentType());
         myDocument.setOriginalFilename(filetosave.getOriginalFilename());

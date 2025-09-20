@@ -67,7 +67,7 @@ public class AiDocService {
 
     }
 
-    public PdfResumeOutput ResumePdfDocumentWithAi(Long docId) throws IOException {
+        public PdfResumeOutput ResumePdfDocumentWithAi(Long docId) throws FileNotFoundException {
         if (docId == null) throw new IllegalArgumentException("Document ID cannot be null");
 
         Optional<MyDocument> document = docRepo.findById(docId);
