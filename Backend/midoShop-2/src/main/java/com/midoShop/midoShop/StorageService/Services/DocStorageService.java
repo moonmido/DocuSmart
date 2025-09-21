@@ -38,5 +38,14 @@ public class DocStorageService {
     }
 
 
+    public Long numberOfFiles(String userId){
+        if(userId==null) throw new IllegalArgumentException();
+
+        return docRepo.countByUserId(userId);
+
+    }
+
+
+
 
 }

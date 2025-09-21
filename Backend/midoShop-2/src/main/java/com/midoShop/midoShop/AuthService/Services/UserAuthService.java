@@ -3,6 +3,7 @@ package com.midoShop.midoShop.AuthService.Services;
 import com.midoShop.midoShop.AuthService.AuthExceptions.CannotCreateAccountException;
 import com.midoShop.midoShop.AuthService.AuthExceptions.UserNotInDBException;
 import com.midoShop.midoShop.AuthService.Models.MyUser;
+import com.midoShop.midoShop.AuthService.Outputs.UserProfile;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserAuthService {
@@ -37,8 +40,10 @@ public class UserAuthService {
         userRepresentation.setUsername(myUser.email());
         userRepresentation.setEnabled(true);
 
+        Map<String , List<String>> Attributes = new HashMap<>();
+        Attributes.put("PhoneNumber",List.of(myUser.phone()));
 
-
+        userRepresentation.setAttributes(Attributes);
 
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setValue(myUser.password());
@@ -128,7 +133,24 @@ public void updateProfile(String userId, MyUser myUser){
         }catch (Exception e){
             return false;
         }
+    }
 
+    public UserProfile GetUserInformations(String userId){
+        if(userId==null) throw new IllegalArgumentException();
+        if(!IsUserExistbyId(userId)) throw new UserNotInDBException();
+
+        UserRepresentation representation = keycloak.realm(realm)
+                .users()
+                .get(userId)
+                .toRepresentation();
+
+        UserProfile userProfile = new UserProfile();
+        userProfile.setEmail(representation.getEmail());
+        userProfile.setFirstname(representation.getFirstName());
+        userProfile.setLastname(representation.getLastName());
+        userProfile.setPhoneNumber(representation.getAttributes().get("PhoneNumber").get(0));
+
+        return userProfile;
     }
 
 }

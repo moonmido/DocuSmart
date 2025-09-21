@@ -16,4 +16,5 @@ public interface DocRepo extends JpaRepository<MyDocument,Long> {
 
     Optional<MyDocument> findByIdAndUserId(Long docId, String userId);
 
+    long countByUserId(String userId);
 }
