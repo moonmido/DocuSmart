@@ -3,12 +3,14 @@ package com.midoShop.midoShop.DocumentService.Services;
 import com.midoShop.midoShop.AuthService.Services.UserAuthService;
 import com.midoShop.midoShop.DocumentService.DTOs.MyDocumentType;
 import com.midoShop.midoShop.DocumentService.Inputs.MyDocumentInputInfo;
+import com.midoShop.midoShop.DocumentService.Models.MyDocES;
 import com.midoShop.midoShop.DocumentService.Models.MyDocument;
 import com.midoShop.midoShop.DocumentService.Prompt.ClassifyDocumentType;
 import com.midoShop.midoShop.DocumentService.Repositories.DocRepo;
 import jakarta.ws.rs.core.MediaType;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import com.midoShop.midoShop.AuthService.Services.UserAuthService;
 import org.springframework.util.MimeType;
@@ -32,6 +34,7 @@ public class DocService {
 
     private final DocRepo repo;
     private final ChatClient chatClient;
+    private KafkaTemplate<String , MyDocES> kafkaTemplate;
 
     private final String DIRECTORY_PATH="\\Users\\mac\\Desktop\\Backend\\Store";
 
@@ -58,6 +61,7 @@ public class DocService {
     Files.copy(filetosave.getInputStream() , targetFile.toPath() , StandardCopyOption.REPLACE_EXISTING);
 
         MyDocument myDocument = new MyDocument();
+
         myDocument.setName(myDocumentInputInfo.DocName());
         myDocument.setFilePath(targetFile.getPath());
         myDocument.setIssueDate(myDocumentInputInfo.issueDate());
@@ -69,8 +73,26 @@ public class DocService {
         myDocument.setTags(myDocumentInputInfo.tags());
         myDocument.setCreatedAt(LocalDate.now());
         myDocument.setUserId(userId);
-        repo.save(myDocument);
 
+
+        MyDocument save = repo.save(myDocument);
+
+        MyDocES myDocES = new MyDocES();
+
+        myDocES.setId(save.getId());
+        myDocES.setName(myDocumentInputInfo.DocName());
+        myDocES.setFilePath(targetFile.getPath());
+        myDocES.setIssueDate(myDocumentInputInfo.issueDate());
+        myDocES.setExpiryDate(myDocumentInputInfo.ExpiryDate());
+        myDocES.setFileSize(filetosave.getSize());
+        myDocES.setMimeType(filetosave.getContentType());
+        myDocES.setType(myDocumentInputInfo.myDocumentType());
+        myDocES.setOriginalFilename(filetosave.getOriginalFilename());
+        myDocES.setTags(myDocumentInputInfo.tags());
+        myDocES.setCreatedAt(LocalDate.now());
+        myDocES.setUserId(userId);
+
+        kafkaTemplate.send("my-doc" , myDocES);
     }
 
     public List<MyDocument> GetAllDocumentsByUserId(String userId){
