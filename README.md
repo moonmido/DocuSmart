@@ -57,9 +57,5 @@ flowchart TD
 3. Updated **Tech Stack** and **Setup instructions**.  
 4. Clearly integrated **Spring AI** for document classification.  
 
----
 
-If you want, I can **also create a diagram showing the full flow**: client → Keycloak auth → DocuSmart → Spring AI → Elasticsearch/Kafka → PostgreSQL, which makes the architecture crystal clear.  
-
-Do you want me to make that diagram?
 
