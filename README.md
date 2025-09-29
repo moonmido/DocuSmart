@@ -13,27 +13,27 @@ It combines **AI-powered insights**, **full-text search & auto-suggestions**, **
 
 ## ✨ Features
 
-- 🔐 **Authentication & Authorization**  
-  - JWT-based authentication  
-  - Role-Based Access Control (RBAC) with `ADMIN`, `EDITOR`, `VIEWER`  
+- 🔐 **Authentication & Authorization**
+  - JWT-based authentication
+  - Role-Based Access Control (RBAC) with `ADMIN`, `EDITOR`, `VIEWER`
 
-- 🤖 **AI-Enhanced Workflows**  
-  - Document analysis & recommendations  
-  - Tagging, summarization, or categorization support  
+- 🤖 **AI-Enhanced Workflows**
+  - Document analysis & recommendations
+  - Tagging, summarization, or categorization support
 
-- 🔎 **Search & Auto-Suggestions**  
-  - **Elasticsearch** integration for full-text search  
-  - Smart **auto-completion** via the `completion` suggester  
+- 🔎 **Search & Auto-Suggestions**
+  - **Elasticsearch** integration for full-text search
+  - Smart **auto-completion** via the `completion` suggester
 
-- ⚡ **Event-Driven Processing**  
-  - **Apache Kafka** streams document events (`created`, `updated`, `deleted`)  
-  - Easy integration with downstream services (analytics, notifications, audit logs)  
+- ⚡ **Event-Driven Processing**
+  - **Apache Kafka** streams document events (`created`, `updated`, `deleted`)
+  - Easy integration with downstream services (analytics, notifications, audit logs)
 
-- 🗄 **Reliable Persistence**  
-  - **PostgreSQL** as the main relational database  
+- 🗄 **Reliable Persistence**
+  - **PostgreSQL** as the main relational database
 
-- 🏗 **Monolithic Architecture**  
-  - Easier deployment and centralized module management  
+- 🏗 **Monolithic Architecture**
+  - Easier deployment and centralized module management
 
 ---
 
@@ -41,7 +41,8 @@ It combines **AI-powered insights**, **full-text search & auto-suggestions**, **
 
 ```mermaid
 flowchart TD
-    A[Client / Frontend] -->|REST API| B[DocuSmart (Spring Boot)]
+    A[Client / Frontend] --> B["DocuSmart (Spring Boot)"]
     B --> C[(PostgreSQL)]
     B --> D[(Elasticsearch)]
-    B --> E[(Kafka Topics)]
+    B --> E[(Kafka Topics / Consumers)]
+
